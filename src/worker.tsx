@@ -67,6 +67,21 @@ export default {
     const jsonLd = generateJsonLd(profile);
     const jsonLdTag = `<script type="application/ld+json">${jsonLd}</script>`;
 
+    const pageTitle = `${profile.nameEn} - ${profile.jobTitle} | kom3da.dev`;
+    const description = `${profile.nameEn} (${profile.name}) - ${profile.jobTitle}。${profile.bio}`;
+    const metaTags = [
+      `<meta name="description" content="${description}" />`,
+      `<meta property="og:title" content="${pageTitle}" />`,
+      `<meta property="og:description" content="${profile.bio}" />`,
+      `<meta property="og:image" content="${profile.url}/og-image.png" />`,
+      `<meta property="og:url" content="${profile.url}" />`,
+      `<meta property="og:type" content="website" />`,
+      `<meta name="twitter:card" content="summary_large_image" />`,
+      `<meta name="twitter:title" content="${pageTitle}" />`,
+      `<meta name="twitter:description" content="${profile.bio}" />`,
+      `<meta name="twitter:image" content="${profile.url}/og-image.png" />`,
+    ].join("\n    ");
+
     const templateResponse = await env.ASSETS.fetch(
       new Request(new URL("/index.html", request.url))
     );
@@ -74,7 +89,9 @@ export default {
 
     const html = template
       .replace("<!--ssr-->", appHtml)
-      .replace("<!--jsonld-->", jsonLdTag);
+      .replace("<!--jsonld-->", jsonLdTag)
+      .replace("<!--meta-->", metaTags)
+      .replace("<!--title-->", `<title>${pageTitle}</title>`);
 
     const response = new Response(html, {
       headers: {
