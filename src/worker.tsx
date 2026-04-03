@@ -1,5 +1,5 @@
 import { render } from "./entry-server";
-import { generatePersonJsonLd } from "./lib/jsonld";
+import { generateJsonLd } from "./lib/jsonld";
 import { generateLlmsTxt, generateLlmsFullTxt } from "./lib/llms";
 import profile from "../profile.json";
 
@@ -60,7 +60,7 @@ export default {
 
     // SSR
     const appHtml = render();
-    const jsonLd = generatePersonJsonLd(profile);
+    const jsonLd = generateJsonLd(profile);
     const jsonLdTag = `<script type="application/ld+json">${jsonLd}</script>`;
 
     const templateResponse = await env.ASSETS.fetch(
