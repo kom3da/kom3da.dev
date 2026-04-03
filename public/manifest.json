@@ -1,0 +1,16 @@
+{
+  "name": "kom3da.dev",
+  "short_name": "kom3da",
+  "description": "Ryuichi Komeda - Software Engineer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1b26",
+  "theme_color": "#1a1b26",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

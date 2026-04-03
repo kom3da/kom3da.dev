@@ -8,6 +8,7 @@ import profile from "../profile.json";
 export function App() {
   return (
     <div className="app">
+      <a href="#about" className="skip-link">Skip to content</a>
       <header className="site-header">
         <h1 className="site-title">kom3da.dev</h1>
         <ThemeToggle />
