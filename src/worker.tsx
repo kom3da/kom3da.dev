@@ -26,6 +26,11 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
 
+    // /favicon.ico → SVG favicon
+    if (url.pathname === "/favicon.ico") {
+      return env.ASSETS.fetch(new Request(new URL("/favicon.svg", request.url)));
+    }
+
     // llms.txt routes
     if (url.pathname === "/llms.txt") {
       return new Response(generateLlmsTxt(profile), {
