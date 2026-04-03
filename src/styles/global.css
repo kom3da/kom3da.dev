@@ -238,7 +238,19 @@ main {
 }
 
 .link-list li {
-  padding: 0.1rem 0;
+  padding: 0.15rem 0;
+}
+
+.link-list a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.link-icon {
+  width: 1em;
+  height: 1em;
+  flex-shrink: 0;
 }
 
 /* ========================================
