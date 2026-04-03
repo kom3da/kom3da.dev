@@ -1,4 +1,4 @@
-import type { Skill } from "../data/profile";
+import type { Skill } from "../types";
 
 interface SkillsProps {
   skills: Skill[];

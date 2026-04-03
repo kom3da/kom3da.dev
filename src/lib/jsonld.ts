@@ -1,4 +1,4 @@
-import type { Profile } from "../data/profile";
+import type { Profile } from "../types";
 
 export function generatePersonJsonLd(profile: Profile): string {
   const jsonLd = {

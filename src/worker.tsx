@@ -1,7 +1,7 @@
 import { render } from "./entry-server";
 import { generatePersonJsonLd } from "./lib/jsonld";
 import { generateLlmsTxt, generateLlmsFullTxt } from "./lib/llms";
-import profile from "./data/profile";
+import profile from "../profile.json";
 
 interface Env {
   ASSETS: Fetcher;
