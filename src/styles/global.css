@@ -1,0 +1,287 @@
+/* ========================================
+   CSS Variables — Theme
+   ======================================== */
+
+:root,
+[data-theme="dark"] {
+  --bg: #1a1b26;
+  --text: #a9b1d6;
+  --text-muted: #565f89;
+  --accent: #7aa2f7;
+  --accent-secondary: #9ece6a;
+  --terminal-bg: #16161e;
+  --terminal-border: #292e42;
+  --terminal-header-bg: #1f2335;
+  --dot-red: #f7768e;
+  --dot-yellow: #e0af68;
+  --dot-green: #9ece6a;
+  --progress-bg: #292e42;
+  --progress-fill: #7aa2f7;
+  --link: #7dcfff;
+  --header-bg: #16161e;
+  --footer-text: #565f89;
+}
+
+[data-theme="light"] {
+  --bg: #f0f0f3;
+  --text: #343b58;
+  --text-muted: #9699a3;
+  --accent: #34548a;
+  --accent-secondary: #485e30;
+  --terminal-bg: #ffffff;
+  --terminal-border: #d5d6db;
+  --terminal-header-bg: #e9e9ec;
+  --dot-red: #8c4351;
+  --dot-yellow: #8f5e15;
+  --dot-green: #485e30;
+  --progress-bg: #d5d6db;
+  --progress-fill: #34548a;
+  --link: #166775;
+  --header-bg: #e9e9ec;
+  --footer-text: #9699a3;
+}
+
+/* ========================================
+   Reset & Base
+   ======================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", "Cascadia Code", monospace;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a {
+  color: var(--link);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style: none;
+}
+
+/* ========================================
+   Layout
+   ======================================== */
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.site-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.site-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+main {
+  flex: 1;
+}
+
+.site-footer {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--terminal-border);
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--footer-text);
+}
+
+/* ========================================
+   Theme Toggle
+   ======================================== */
+
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--terminal-border);
+  color: var(--text);
+  font-size: 1.1rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent);
+}
+
+/* ========================================
+   Terminal
+   ======================================== */
+
+.terminal {
+  border: 1px solid var(--terminal-border);
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: var(--terminal-bg);
+}
+
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 1rem;
+  background-color: var(--terminal-header-bg);
+  border-bottom: 1px solid var(--terminal-border);
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.dot-red {
+  background-color: var(--dot-red);
+}
+
+.dot-yellow {
+  background-color: var(--dot-yellow);
+}
+
+.dot-green {
+  background-color: var(--dot-green);
+}
+
+.terminal-title {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.terminal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* ========================================
+   Sections
+   ======================================== */
+
+.section-prompt {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 1rem;
+}
+
+.section-prompt.sub {
+  font-size: 0.95rem;
+  margin-top: 1rem;
+}
+
+.prompt-symbol {
+  color: var(--accent-secondary);
+  margin-right: 0.3rem;
+}
+
+.section-content {
+  margin-bottom: 1rem;
+}
+
+.output-line {
+  padding: 0.15rem 0;
+}
+
+.label {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ========================================
+   Links
+   ======================================== */
+
+.link-list li::before {
+  content: "- ";
+  color: var(--text-muted);
+}
+
+.link-list li {
+  padding: 0.1rem 0;
+}
+
+/* ========================================
+   Skills
+   ======================================== */
+
+.category-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  font-size: 0.85rem;
+  padding: 0.25rem 0.7rem;
+  border: 1px solid var(--terminal-border);
+  border-radius: 4px;
+  color: var(--accent);
+  background-color: transparent;
+}
+
+/* ========================================
+   Responsive
+   ======================================== */
+
+@media (max-width: 480px) {
+  .app {
+    padding: 1rem 0.75rem;
+  }
+
+  .terminal-body {
+    padding: 1rem;
+  }
+
+  .site-title {
+    font-size: 1rem;
+  }
+}

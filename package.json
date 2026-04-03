@@ -1,0 +1,24 @@
+{
+  "name": "kom3da-dev",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "wrangler deploy"
+  },
+  "dependencies": {
+    "@cloudflare/vite-plugin": "^1.31.0",
+    "@vitejs/plugin-react": "^6.0.1",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "vite": "^8.0.3",
+    "wrangler": "^4.80.0"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260403.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3"
+  }
+}
