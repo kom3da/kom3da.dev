@@ -1,26 +1,36 @@
 # kom3da.dev
 
-Ryuichi Komeda のプロフィールサイト。
+Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 
 ## 技術スタック
 
 - **ビルド**: Vite 8
 - **UI**: React 19 + TypeScript
-- **ホスティング**: Cloudflare Workers（SSG + ISR）
+- **ホスティング**: Cloudflare Workers（SSR + Cache API）
 - **スタイル**: CSS（フレームワーク不使用）
+- **CI/CD**: GitHub Actions → 自動ビルド・デプロイ・キャッシュパージ
+- **Analytics**: Cloudflare Web Analytics + GA4
 
-## アーキテクチャ
+## プロジェクト構成
 
 ```
-src/
-├── components/    # React コンポーネント
-├── data/          # プロフィールデータ（profile.ts）
-├── lib/           # ユーティリティ（llms.txt生成, JSON-LD生成）
-├── styles/        # グローバルCSS
-├── App.tsx        # メインアプリ
-├── entry-client.tsx  # クライアントハイドレーション
-├── entry-server.tsx  # SSR レンダリング関数
-└── worker.ts      # Cloudflare Worker エントリ
+├── profile.json          # プロフィールデータ（編集はここだけ）
+├── index.html            # HTMLテンプレート
+├── vite.config.ts
+├── wrangler.jsonc        # Cloudflare Workers 設定
+├── public/
+│   └── favicon.svg
+├── src/
+│   ├── types.ts          # 型定義（Profile, Skill）
+│   ├── App.tsx           # メインアプリ
+│   ├── entry-client.tsx  # クライアントハイドレーション
+│   ├── entry-server.tsx  # SSR レンダリング関数
+│   ├── worker.tsx        # Cloudflare Worker エントリ
+│   ├── components/       # React コンポーネント
+│   ├── lib/              # ユーティリティ（llms.txt, JSON-LD生成）
+│   └── styles/           # グローバルCSS
+└── .github/workflows/
+    └── deploy.yml        # 自動デプロイ
 ```
 
 ## デザイン方針
@@ -41,7 +51,7 @@ src/
 npm run dev        # 開発サーバー起動
 npm run build      # プロダクションビルド
 npm run preview    # ビルド結果プレビュー
-npm run deploy     # Cloudflare Workers へデプロイ
+npm run deploy     # Cloudflare Workers へ手動デプロイ
 ```
 
 ## コーディング規約
@@ -49,4 +59,5 @@ npm run deploy     # Cloudflare Workers へデプロイ
 - 言語: TypeScript strict mode
 - コンポーネント: 関数コンポーネント + hooks
 - CSS: CSS変数でテーマ管理（`--terminal-bg`, `--terminal-text` 等）
-- プロフィールデータは `src/data/profile.ts` に集約。コンポーネントにハードコードしない
+- プロフィールデータは `profile.json` に集約。コンポーネントにハードコードしない
+- Worker では `run_worker_first: true` を使用。配列パターンはアセット MIME type が壊れるため不可

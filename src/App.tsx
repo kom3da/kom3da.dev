@@ -2,7 +2,7 @@ import { Terminal } from "./components/Terminal";
 import { About } from "./components/About";
 import { Skills } from "./components/Skills";
 import { ThemeToggle } from "./components/ThemeToggle";
-import profile from "./data/profile";
+import profile from "../profile.json";
 
 export function App() {
   return (

@@ -1,5 +1,3 @@
-import profileData from "../../profile.json";
-
 export interface Skill {
   id: string;
   name: string;
@@ -15,7 +13,3 @@ export interface Profile {
   links: { label: string; url: string }[];
   skills: Skill[];
 }
-
-const profile: Profile = profileData;
-
-export default profile;
