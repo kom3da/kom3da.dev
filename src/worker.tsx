@@ -79,6 +79,11 @@ export default {
       });
     }
 
+    // Security headers
+    response.headers.set("X-Content-Type-Options", "nosniff");
+    response.headers.set("X-Frame-Options", "DENY");
+    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+
     // Store in cache
     const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
     if (ctx.waitUntil) {
