@@ -57,6 +57,21 @@
   padding: 0;
 }
 
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 0.5rem 1rem;
+  background: var(--accent);
+  color: var(--terminal-bg);
+  z-index: 100;
+  font-size: 0.85rem;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
 html {
   font-size: 16px;
   -webkit-font-smoothing: antialiased;
@@ -372,5 +387,18 @@ main {
 
   .site-title {
     font-size: 1rem;
+  }
+}
+
+/* ========================================
+   Reduced Motion
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
   }
 }
