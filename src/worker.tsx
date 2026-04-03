@@ -73,13 +73,13 @@ export default {
       `<meta name="description" content="${description}" />`,
       `<meta property="og:title" content="${pageTitle}" />`,
       `<meta property="og:description" content="${profile.bio}" />`,
-      `<meta property="og:image" content="${profile.url}/og-image.png" />`,
+      `<meta property="og:image" content="${profile.url}/og-image.png?v=2" />`,
       `<meta property="og:url" content="${profile.url}" />`,
       `<meta property="og:type" content="website" />`,
       `<meta name="twitter:card" content="summary_large_image" />`,
       `<meta name="twitter:title" content="${pageTitle}" />`,
       `<meta name="twitter:description" content="${profile.bio}" />`,
-      `<meta name="twitter:image" content="${profile.url}/og-image.png" />`,
+      `<meta name="twitter:image" content="${profile.url}/og-image.png?v=2" />`,
     ].join("\n    ");
 
     const templateResponse = await env.ASSETS.fetch(
