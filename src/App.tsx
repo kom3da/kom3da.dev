@@ -8,7 +8,7 @@ export function App() {
   return (
     <div className="app">
       <header className="site-header">
-        <span className="site-title">kom3da.dev</span>
+        <h1 className="site-title">kom3da.dev</h1>
         <ThemeToggle />
       </header>
       <main>
