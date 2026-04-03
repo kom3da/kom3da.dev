@@ -1,8 +1,7 @@
 import type { Profile } from "../types";
 
 export function generatePersonJsonLd(profile: Profile): string {
-  const jsonLd = {
-    "@context": "https://schema.org",
+  const person = {
     "@type": "Person",
     name: profile.nameEn,
     alternateName: profile.name,
@@ -12,5 +11,14 @@ export function generatePersonJsonLd(profile: Profile): string {
     sameAs: profile.links.filter((l) => l.label !== "Email").map((l) => l.url),
     knowsAbout: profile.skills.map((s) => s.name),
   };
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    dateCreated: "2026-04-03",
+    dateModified: new Date().toISOString().split("T")[0],
+    mainEntity: person,
+  };
+
   return JSON.stringify(jsonLd);
 }
