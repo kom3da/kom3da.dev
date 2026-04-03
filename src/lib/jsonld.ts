@@ -15,8 +15,8 @@ export function generatePersonJsonLd(profile: Profile): string {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ProfilePage",
-    dateCreated: "2026-04-03",
-    dateModified: new Date().toISOString().split("T")[0],
+    dateCreated: "2026-04-03T00:00:00+09:00",
+    dateModified: new Date().toISOString(),
     mainEntity: person,
   };
 
