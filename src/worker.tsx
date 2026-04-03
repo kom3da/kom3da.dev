@@ -29,60 +29,58 @@ export default {
       return env.ASSETS.fetch(new Request(new URL("/favicon.svg", request.url)));
     }
 
+    // llms.txt routes (before static asset check — .txt has extension)
+    if (url.pathname === "/llms.txt") {
+      return new Response(generateLlmsTxt(profile), {
+        headers: {
+          "content-type": "text/plain; charset=utf-8",
+          "cache-control": "public, max-age=3600, s-maxage=86400",
+        },
+      });
+    }
+
+    if (url.pathname === "/llms-full.txt") {
+      return new Response(generateLlmsFullTxt(profile), {
+        headers: {
+          "content-type": "text/plain; charset=utf-8",
+          "cache-control": "public, max-age=3600, s-maxage=86400",
+        },
+      });
+    }
+
     // Static assets → pass through directly
     if (!isPageRoute(url.pathname)) {
       return env.ASSETS.fetch(request);
     }
 
-    // Check Cache API for SSR/llms routes
+    // Check Cache API for SSR
     const cache = (caches as unknown as { default: Cache }).default;
     const cached = await cache.match(request);
     if (cached) return cached;
 
-    // Generate response
-    let response: Response;
+    // SSR
+    const appHtml = render();
+    const jsonLd = generatePersonJsonLd(profile);
+    const jsonLdTag = `<script type="application/ld+json">${jsonLd}</script>`;
 
-    if (url.pathname === "/llms.txt") {
-      response = new Response(generateLlmsTxt(profile), {
-        headers: {
-          "content-type": "text/plain; charset=utf-8",
-          "cache-control": "public, max-age=3600, s-maxage=86400",
-        },
-      });
-    } else if (url.pathname === "/llms-full.txt") {
-      response = new Response(generateLlmsFullTxt(profile), {
-        headers: {
-          "content-type": "text/plain; charset=utf-8",
-          "cache-control": "public, max-age=3600, s-maxage=86400",
-        },
-      });
-    } else {
-      // SSR
-      const appHtml = render();
-      const jsonLd = generatePersonJsonLd(profile);
-      const jsonLdTag = `<script type="application/ld+json">${jsonLd}</script>`;
+    const templateResponse = await env.ASSETS.fetch(
+      new Request(new URL("/index.html", request.url))
+    );
+    const template = await templateResponse.text();
 
-      const templateResponse = await env.ASSETS.fetch(
-        new Request(new URL("/index.html", request.url))
-      );
-      const template = await templateResponse.text();
+    const html = template
+      .replace("<!--ssr-->", appHtml)
+      .replace("<!--jsonld-->", jsonLdTag);
 
-      const html = template
-        .replace("<!--ssr-->", appHtml)
-        .replace("<!--jsonld-->", jsonLdTag);
-
-      response = new Response(html, {
-        headers: {
-          "content-type": "text/html; charset=utf-8",
-          "cache-control": "public, max-age=300, s-maxage=86400",
-        },
-      });
-    }
-
-    // Security headers
-    response.headers.set("X-Content-Type-Options", "nosniff");
-    response.headers.set("X-Frame-Options", "DENY");
-    response.headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
+    const response = new Response(html, {
+      headers: {
+        "content-type": "text/html; charset=utf-8",
+        "cache-control": "public, max-age=300, s-maxage=86400",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "DENY",
+        "Referrer-Policy": "strict-origin-when-cross-origin",
+      },
+    });
 
     // Store in cache
     const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
