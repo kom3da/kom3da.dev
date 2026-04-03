@@ -53,10 +53,14 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    // Check Cache API for SSR
-    const cache = (caches as unknown as { default: Cache }).default;
-    const cached = await cache.match(request);
-    if (cached) return cached;
+    // Check Cache API for SSR (production only)
+    const cache = typeof caches !== "undefined"
+      ? (caches as unknown as { default: Cache }).default
+      : null;
+    if (cache) {
+      const cached = await cache.match(request);
+      if (cached) return cached;
+    }
 
     // SSR
     const appHtml = render();
@@ -83,12 +87,14 @@ export default {
       },
     });
 
-    // Store in cache
-    const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
-    if (ctx.waitUntil) {
-      ctx.waitUntil(cache.put(request, response.clone()));
-    } else {
-      await cache.put(request, response.clone());
+    // Store in cache (production only)
+    if (cache) {
+      const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
+      if (ctx.waitUntil) {
+        ctx.waitUntil(cache.put(request, response.clone()));
+      } else {
+        await cache.put(request, response.clone());
+      }
     }
 
     return response;

@@ -1,8 +1,8 @@
 {
   "name": "米田 龍一",
   "nameEn": "Ryuichi Komeda",
-  "jobTitle": "Software Engineer",
-  "bio": "Webアプリケーションの設計・開発からインフラ構築・運用まで幅広く携わっているソフトウェアエンジニアです。",
+  "jobTitle": "Web Developer / Infrastructure Engineer",
+  "bio": "Webアプリケーションの設計・開発から、サーバー・クラウド基盤の構築・運用まで一貫して対応できるエンジニアです。",
   "url": "https://kom3da.dev",
   "links": [
     { "label": "GitHub", "url": "https://github.com/kom3da" },
@@ -10,12 +10,12 @@
     { "label": "Email", "url": "mailto:me@kom3da.dev" }
   ],
   "skills": [
-    { "id": "typescript", "name": "TypeScript", "category": "Language" },
-    { "id": "go", "name": "Go", "category": "Language" },
-    { "id": "javascript", "name": "JavaScript", "category": "Language" },
-    { "id": "php", "name": "PHP", "category": "Language" },
-    { "id": "sql", "name": "SQL", "category": "Language" },
-    { "id": "html-css", "name": "HTML / CSS", "category": "Language" },
+    { "id": "typescript", "name": "TypeScript", "category": "Languages" },
+    { "id": "go", "name": "Go", "category": "Languages" },
+    { "id": "javascript", "name": "JavaScript", "category": "Languages" },
+    { "id": "php", "name": "PHP", "category": "Languages" },
+    { "id": "sql", "name": "SQL", "category": "Languages" },
+    { "id": "html-css", "name": "HTML / CSS", "category": "Languages" },
     { "id": "react", "name": "React", "category": "Frontend" },
     { "id": "nextjs", "name": "Next.js", "category": "Frontend" },
     { "id": "vue", "name": "Vue", "category": "Frontend" },

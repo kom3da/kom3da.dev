@@ -20,7 +20,7 @@ export function Neofetch() {
   return (
     <section id="built-with" aria-label="Built with">
       <h2 className="section-prompt">
-        <span className="prompt-symbol">&gt;</span> neofetch
+        <span className="prompt-symbol">&gt;</span> Built with
       </h2>
       <div className="neofetch">
         <pre className="neofetch-ascii" aria-hidden="true">

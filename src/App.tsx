@@ -22,6 +22,13 @@ export function App() {
       </main>
       <footer className="site-footer">
         <p>© {new Date().getFullYear()} {profile.nameEn}</p>
+        <p className="footer-source">
+          <a href="https://github.com/kom3da/kom3da.dev" target="_blank" rel="noopener noreferrer">
+            View Source on GitHub
+          </a>
+          {" · "}
+          Built with <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a>
+        </p>
       </footer>
     </div>
   );
