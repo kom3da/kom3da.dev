@@ -1,6 +1,7 @@
 import { Terminal } from "./components/Terminal";
 import { About } from "./components/About";
 import { Skills } from "./components/Skills";
+import { Neofetch } from "./components/Neofetch";
 import { ThemeToggle } from "./components/ThemeToggle";
 import profile from "../profile.json";
 
@@ -15,6 +16,7 @@ export function App() {
         <Terminal title="komeda@dev ~ ">
           <About profile={profile} />
           <Skills skills={profile.skills} />
+          <Neofetch />
         </Terminal>
       </main>
       <footer className="site-footer">
