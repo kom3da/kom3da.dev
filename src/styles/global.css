@@ -143,6 +143,19 @@ main {
   color: var(--footer-text);
 }
 
+.footer-source {
+  margin-top: 0.3rem;
+  font-size: 0.75rem;
+}
+
+.footer-source a {
+  color: var(--text-muted);
+}
+
+.footer-source a:hover {
+  color: var(--link);
+}
+
 /* ========================================
    Theme Toggle
    ======================================== */
