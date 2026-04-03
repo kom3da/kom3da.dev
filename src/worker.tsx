@@ -7,6 +7,13 @@ interface Env {
   ASSETS: Fetcher;
 }
 
+function isPageRoute(pathname: string): boolean {
+  if (pathname === "/") return true;
+  if (/\.\w+$/.test(pathname)) return false;
+  if (pathname.startsWith("/@") || pathname.startsWith("/node_modules/")) return false;
+  return true;
+}
+
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
@@ -22,7 +29,12 @@ export default {
       return env.ASSETS.fetch(new Request(new URL("/favicon.svg", request.url)));
     }
 
-    // Check Cache API first
+    // Static assets → pass through directly
+    if (!isPageRoute(url.pathname)) {
+      return env.ASSETS.fetch(request);
+    }
+
+    // Check Cache API for SSR/llms routes
     const cache = (caches as unknown as { default: Cache }).default;
     const cached = await cache.match(request);
     if (cached) return cached;
@@ -67,8 +79,8 @@ export default {
       });
     }
 
-    // Store in cache (non-blocking)
-    const ctx = (globalThis as unknown as { waitUntil?: (p: Promise<void>) => void });
+    // Store in cache
+    const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
     if (ctx.waitUntil) {
       ctx.waitUntil(cache.put(request, response.clone()));
     } else {
