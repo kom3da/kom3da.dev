@@ -48,6 +48,20 @@ export default {
       });
     }
 
+    // Non-root page routes → 404
+    if (url.pathname !== "/" && isPageRoute(url.pathname)) {
+      const notFound = await env.ASSETS.fetch(
+        new Request(new URL("/404.html", request.url))
+      );
+      return new Response(notFound.body, {
+        status: 404,
+        headers: {
+          "content-type": "text/html; charset=utf-8",
+          "X-Content-Type-Options": "nosniff",
+        },
+      });
+    }
+
     // Static assets → pass through directly
     if (!isPageRoute(url.pathname)) {
       return env.ASSETS.fetch(request);
