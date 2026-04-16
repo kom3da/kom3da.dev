@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git push:*)",
+      "Bash(npx wrangler dev:*)",
+      "Bash(curl *)",
+      "Bash(kill *)",
+      "Bash(lsof *)",
+      "WebFetch",
+      "Bash(xargs -r kill)",
+      "Bash(npm run build)",
+      "Bash(npm run dev)",
+      "Bash(npm run preview)"
+    ]
+  }
+}

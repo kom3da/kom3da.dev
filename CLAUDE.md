@@ -24,6 +24,7 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 │   ├── icon-192.png      # Android PWA アイコン
 │   ├── icon-512.png      # Android PWA アイコン（大）
 │   ├── og-image.png      # OGP 画像
+│   ├── 404.html          # 404 ページ（noindex）
 │   ├── manifest.json     # Web App Manifest
 │   ├── robots.txt
 │   └── sitemap.xml
@@ -94,6 +95,12 @@ npm run build      # プロダクションビルド
 npm run preview    # ビルド結果プレビュー
 npm run deploy     # Cloudflare Workers へ手動デプロイ
 ```
+
+## Claude Code スラッシュコマンド
+
+- `/dev` — 開発サーバーを起動し、ルートページの応答を確認
+- `/check` — ビルド → ローカル Wrangler で主要ルートを検証 → 本番サイトの疎通確認
+- `/deploy` — ビルド → コミット → `main` へ push（CI/CD で自動デプロイ）
 
 ## コーディング規約
 
