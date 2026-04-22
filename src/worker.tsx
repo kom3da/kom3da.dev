@@ -67,11 +67,12 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
-    // Check Cache API for SSR (production only)
+    // Check Cache API for SSR (production only, GET only — cache API rejects HEAD)
     const cache = typeof caches !== "undefined"
       ? (caches as unknown as { default: Cache }).default
       : null;
-    if (cache) {
+    const cacheable = cache && request.method === "GET";
+    if (cacheable) {
       const cached = await cache.match(request);
       if (cached) return cached;
     }
@@ -107,7 +108,7 @@ export default {
       .replace("<!--meta-->", metaTags)
       .replace("<!--title-->", `<title>${pageTitle}</title>`);
 
-    const response = new Response(html, {
+    const response = new Response(request.method === "HEAD" ? null : html, {
       headers: {
         "content-type": "text/html; charset=utf-8",
         "cache-control": "public, max-age=300, s-maxage=86400",
@@ -118,8 +119,8 @@ export default {
       },
     });
 
-    // Store in cache (production only)
-    if (cache) {
+    // Store in cache (production only, GET only)
+    if (cacheable) {
       const ctx = globalThis as unknown as { waitUntil?: (p: Promise<void>) => void };
       if (ctx.waitUntil) {
         ctx.waitUntil(cache.put(request, response.clone()));
