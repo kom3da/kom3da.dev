@@ -67,6 +67,21 @@ export default {
       return env.ASSETS.fetch(request);
     }
 
+    // Markdown content negotiation for AI agents
+    const accept = request.headers.get("accept") ?? "";
+    if (accept.includes("text/markdown")) {
+      return new Response(
+        request.method === "HEAD" ? null : generateLlmsFullTxt(profile),
+        {
+          headers: {
+            "content-type": "text/markdown; charset=utf-8",
+            "cache-control": "public, max-age=3600, s-maxage=86400",
+            "vary": "accept",
+          },
+        }
+      );
+    }
+
     // Check Cache API for SSR (production only, GET only — cache API rejects HEAD)
     const cache = typeof caches !== "undefined"
       ? (caches as unknown as { default: Cache }).default
@@ -108,10 +123,18 @@ export default {
       .replace("<!--meta-->", metaTags)
       .replace("<!--title-->", `<title>${pageTitle}</title>`);
 
+    const linkHeader = [
+      '</llms.txt>; rel="alternate"; type="text/markdown"',
+      '</llms-full.txt>; rel="alternate"; type="text/markdown"',
+      '</sitemap.xml>; rel="sitemap"; type="application/xml"',
+    ].join(", ");
+
     const response = new Response(request.method === "HEAD" ? null : html, {
       headers: {
         "content-type": "text/html; charset=utf-8",
         "cache-control": "public, max-age=300, s-maxage=86400",
+        "link": linkHeader,
+        "vary": "accept",
         "X-Content-Type-Options": "nosniff",
         "X-Frame-Options": "DENY",
         "Referrer-Policy": "strict-origin-when-cross-origin",
