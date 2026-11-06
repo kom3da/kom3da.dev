@@ -6,8 +6,8 @@ const SECURITY_HEADERS = {
 };
 
 const ROOT_LINK_HEADER = [
-  '</llms.txt>; rel="alternate"; type="text/markdown"',
-  '</llms-full.txt>; rel="alternate"; type="text/markdown"',
+  '</llms.txt>; rel="alternate"; type="text/plain"',
+  '</llms-full.txt>; rel="alternate"; type="text/plain"',
   '</sitemap.xml>; rel="sitemap"; type="application/xml"',
 ].join(", ");
 
@@ -16,7 +16,7 @@ function withHeaders(response: Response, isRoot: boolean): Response {
   for (const [name, value] of Object.entries(SECURITY_HEADERS)) res.headers.set(name, value);
   if (isRoot) {
     res.headers.set("Link", ROOT_LINK_HEADER);
-    res.headers.set("Vary", "Accept");
+    res.headers.append("Vary", "Accept");
   }
   return res;
 }
@@ -27,7 +27,10 @@ export default {
 
     if (url.hostname === "www.kom3da.dev") {
       url.hostname = "kom3da.dev";
-      return Response.redirect(url.toString(), 301);
+      return withHeaders(
+        new Response(null, { status: 301, headers: { Location: url.toString() } }),
+        false,
+      );
     }
 
     if (url.pathname === "/favicon.ico") {
@@ -40,6 +43,7 @@ export default {
     // Markdown content negotiation for AI agents
     if (isRoot && (request.headers.get("Accept") ?? "").includes("text/markdown")) {
       const md = await env.ASSETS.fetch(new URL("/llms-full.txt", url));
+      if (!md.ok) return withHeaders(md, true);
       return withHeaders(
         new Response(request.method === "HEAD" ? null : md.body, {
           headers: {

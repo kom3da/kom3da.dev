@@ -14,9 +14,10 @@ export default defineConfig({
     },
     { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } } },
   ],
-  // Serve the built output through the real Worker (vp preview runs it in workerd)
+  // Serve the built output through the real Worker (vp preview runs it in workerd).
+  // Locally, rebuild first: `vp check` clears .cloudflare/output. CI tests the artifact it deploys.
   webServer: {
-    command: `pnpm exec vp preview --port ${port} --strictPort`,
+    command: `${process.env.CI ? "" : "pnpm build && "}pnpm exec vp preview --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
   },

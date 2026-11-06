@@ -12,13 +12,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="/manifest.json" />
     <script>
-      (() => {
-        const root = document.documentElement;
-        root.classList.add("js");
-        try {
-          if (localStorage.getItem("motion") === "off") root.dataset.motion = "off";
-        } catch {}
-      })();
+      try {
+        if (localStorage.getItem("motion") === "off") document.documentElement.dataset.motion = "off";
+      } catch {}
     </script>
     <link rel="preconnect" href="https://www.googletagmanager.com" />
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-60WQQ7SZE8"></script>

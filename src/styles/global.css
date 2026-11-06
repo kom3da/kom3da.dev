@@ -246,3 +246,8 @@
     animation-play-state: paused;
   }
 }
+
+/* The motion toggle only works once site.ts runs (unlayered so it beats display utilities) */
+:root:not(.js) [data-motion-toggle] {
+  display: none;
+}

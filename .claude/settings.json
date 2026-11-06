@@ -2,7 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(git push:*)",
-      "Bash(pnpm exec wrangler dev:*)",
+      "Bash(pnpm exec vp preview:*)",
       "Bash(curl *)",
       "Bash(kill *)",
       "Bash(lsof *)",

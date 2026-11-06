@@ -61,6 +61,3 @@ jobs:
 
       # `pnpm deploy` is a pnpm built-in, so call the script explicitly
       - run: pnpm run deploy
-
-      - name: Purge CDN cache
-        run: pnpm exec cf cache purge --zone "${{ secrets.CLOUDFLARE_ZONE_ID }}" --body '{"purge_everything":true}' --force
