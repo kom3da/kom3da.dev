@@ -4,35 +4,33 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 
 ## 技術スタック
 
-- **フレームワーク**: Astro 7（静的出力、クライアント JS は小さな `site.ts` のみ）
+- **ビルド**: Vite+（Vite 8 / Vitest / Oxlint / Oxfmt / tsgolint を `vp` で一括）
+- **ページ生成**: ビルド時に `profile.json` から HTML を生成する自前の Vite プラグイン（`src/build/site-plugin.ts`）
 - **スタイル**: Tailwind CSS 4（`@theme` でデザイントークン管理）
 - **フォント**: JetBrains Mono（`@fontsource-variable` でセルフホスト）+ 日本語はシステムフォント
-- **ホスティング**: Cloudflare Workers（Static Assets + 薄い Worker）
-- **ツール**: mise（Node / pnpm）、pnpm、Biome、Vitest、Playwright + axe、lefthook、Renovate
-- **CI/CD**: GitHub Actions（PR と main で検査 → main のみデプロイ + キャッシュパージ）
+- **ホスティング**: Cloudflare Workers（Static Assets + 薄い Worker）、`cf` CLI + `@cloudflare/vite-plugin`
+- **その他**: mise（Node / pnpm）、pnpm、Playwright + axe、Renovate
+- **CI/CD**: GitHub Actions（PR と main で検査 → main のみ `cf deploy` + キャッシュパージ）
 - **Analytics**: Cloudflare Web Analytics + GA4
+
+`cf`、`@cloudflare/vite-plugin` 2.x はベータ版。挙動が変わったら公式ドキュメント（`cf docs search`）を優先して確認する。
 
 ## プロジェクト構成
 
 ```
-├── profile.json            # プロフィールデータ（編集はここだけ）
-├── astro.config.mjs
-├── wrangler.jsonc          # Worker + Static Assets 設定
-├── public/                 # favicon, PWA アイコン, OG 画像, manifest, robots.txt
+├── profile.json              # プロフィールデータ（編集はここだけ）
+├── index.html / 404.html     # HTML の骨組み（<!--head--> <!--body--> をビルド時に置換）
+├── vite.config.ts            # Vite + Vite+（lint / fmt / staged）設定
+├── cloudflare.config.ts      # Worker 設定（cf）
+├── public/                   # favicon, PWA アイコン, OG 画像, manifest, robots.txt
 ├── src/
-│   ├── pages/
-│   │   ├── index.astro     # トップページ
-│   │   ├── 404.astro       # 404（noindex）
-│   │   ├── llms.txt.ts     # /llms.txt（ビルド時生成）
-│   │   ├── llms-full.txt.ts
-│   │   └── sitemap.xml.ts
-│   ├── layouts/Base.astro  # <head>（meta, OGP, JSON-LD, GA4）
-│   ├── components/         # Header, Hero, Ticker, Links, Skills, Footer, StatusBar ...
-│   ├── lib/                # profile 型, JSON-LD / llms.txt 生成（+ Vitest）
-│   ├── scripts/site.ts     # スクロール連動アニメ, ステータスバーの scroll-spy, motion トグル
-│   └── styles/global.css   # Tailwind + トークン + アニメーション
-├── worker/index.ts         # www リダイレクト, markdown ネゴシエーション, セキュリティヘッダー
-├── e2e/site.spec.ts        # Playwright（ルート, ヘッダー, a11y, モバイル横スクロール）
+│   ├── build/site-plugin.ts  # HTML 生成 + llms.txt / llms-full.txt / sitemap.xml 出力
+│   ├── templates/            # ページ・コンポーネント（エスケープ付き html`` テンプレート）
+│   ├── lib/                  # html エスケープ, profile 型, JSON-LD / llms / sitemap 生成（+ テスト）
+│   ├── scripts/site.ts       # スクロール連動アニメ, ステータスバーの scroll-spy, motion トグル
+│   └── styles/global.css     # Tailwind + トークン + アニメーション
+├── worker/index.ts           # www リダイレクト, markdown ネゴシエーション, セキュリティヘッダー
+├── e2e/site.spec.ts          # Playwright（ルート, ヘッダー, a11y, モバイル横スクロール）
 └── .github/workflows/deploy.yml
 ```
 
@@ -45,7 +43,7 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 
 ## SEO / AI 最適化
 
-- `/llms.txt` `/llms-full.txt` — AI エージェント向けマークダウン
+- `/llms.txt` `/llms-full.txt` — AI エージェント向けマークダウン（ビルド時生成）
 - `Accept: text/markdown` で `/` にアクセスすると llms-full.txt を返す（Worker）
 - `Link` ヘッダーで llms.txt / sitemap を通知
 - JSON-LD（`@graph`: ProfilePage + Person + WebSite）
@@ -68,12 +66,13 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 ## 開発コマンド
 
 ```bash
-pnpm dev         # Astro 開発サーバー（:4321）
-pnpm build       # 静的ビルド（dist/）
-pnpm preview     # ビルド → wrangler dev（Worker 込みで確認、:8787）
-pnpm check       # Biome + astro check + worker tsc + Vitest
-pnpm test:e2e    # Playwright（wrangler dev を自動起動。事前に pnpm build）
-pnpm cf-typegen  # wrangler.jsonc 変更後に Worker の型を再生成
+pnpm dev         # cf dev（Vite + workerd、:4321）
+pnpm build       # cf build（.cloudflare/output に Build Output）
+pnpm preview     # build → vp preview（Worker 込みで確認）
+pnpm check       # cf workers types → vp check（fmt + lint + 型）→ vp test
+pnpm format      # vp check --fix
+pnpm test:e2e    # Playwright（vp preview を自動起動。事前に pnpm build）
+pnpm run deploy  # cf deploy --prebuilt（通常は CI から。`pnpm deploy` は pnpm 組み込みと衝突）
 ```
 
 ## Claude Code スラッシュコマンド
@@ -84,10 +83,12 @@ pnpm cf-typegen  # wrangler.jsonc 変更後に Worker の型を再生成
 
 ## コーディング規約
 
-- 言語: TypeScript strict
-- プロフィールデータは `profile.json` に集約。コンポーネントにハードコードしない
+- 言語: TypeScript strict（`noUncheckedIndexedAccess` 有効）
+- プロフィールデータは `profile.json` に集約。テンプレートにハードコードしない
+- HTML は必ず `src/lib/html.ts` の `html` タグ付きテンプレートで組み立てる（値は自動エスケープ。生 HTML は `raw()` を明示）
 - 色・フォントは `global.css` の `@theme` トークン（`text-lime`, `border-line` 等）を使う
-- Astro 7 のコンパイラは要素間の改行の空白を詰めるので、空白が必要な箇所は `{" "}` を明示する
-- Worker は `run_worker_first: true` で全リクエストを受け、静的ファイルは `env.ASSETS.fetch` に渡す（配列パターンはアセットの MIME type が壊れるため不可）
-- 404 はアセットの `not_found_handling: "404-page"` に任せる
-- Biome は `.astro` のテンプレートを解析しないため、`.astro` では未使用変数/インポートのルールを無効化している
+- Oxfmt の `embeddedLanguageFormatting` は `off`（`html` テンプレート内の文字列を整形で変えないため）
+- Worker は `runWorkerFirst: true` で全リクエストを受け、静的ファイルは `env.ASSETS.fetch` に渡す
+- 404 はアセットの `notFoundHandling: "404-page"` に任せる
+- Worker の型は `cf workers types` が生成する `.cloudflare/types`（`worker/tsconfig.json` から参照）
+- pre-commit は Vite+ の `vp staged`（`.vite-hooks/pre-commit`）。`pnpm install` 時に `vp config` でフックを有効化
