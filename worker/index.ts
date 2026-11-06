@@ -55,6 +55,11 @@ export default {
       );
     }
 
-    return withHeaders(await env.ASSETS.fetch(request), isRoot);
+    const res = withHeaders(await env.ASSETS.fetch(request), isRoot);
+    // Vite emits content-hashed file names under /assets/, so they never change
+    if (url.pathname.startsWith("/assets/") && (res.ok || res.status === 304)) {
+      res.headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    }
+    return res;
   },
 } satisfies ExportedHandler<Env>;

@@ -18,7 +18,7 @@ Personal profile site for Ryuichi Komeda (米田 龍一).
 - Accessibility: WCAG AA contrast (checked by axe), skip navigation, works without JS
 - Mobile: responsive, PWA manifest, Apple touch icon, theme-color
 - Security headers: X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
-- Analytics: Cloudflare Web Analytics + GA4
+- Analytics: Cloudflare Web Analytics
 
 ## Development
 
