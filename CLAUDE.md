@@ -10,7 +10,7 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 - **フォント**: JetBrains Mono（`@fontsource-variable` でセルフホスト）+ 日本語はシステムフォント
 - **ホスティング**: Cloudflare Workers（Static Assets + 薄い Worker）、`cf` CLI + `@cloudflare/vite-plugin`
 - **その他**: mise（Node / pnpm）、pnpm、Playwright + axe、Renovate
-- **CI/CD**: GitHub Actions（PR と main で検査 → main のみ `cf deploy` + キャッシュパージ）
+- **CI/CD**: GitHub Actions（PR と main で検査 → main のみ `cf deploy`）
 - **Analytics**: Cloudflare Web Analytics + GA4
 
 `cf`、`@cloudflare/vite-plugin` 2.x はベータ版。挙動が変わったら公式ドキュメント（`cf docs search`）を優先して確認する。
@@ -71,7 +71,7 @@ pnpm build       # cf build（.cloudflare/output に Build Output）
 pnpm preview     # build → vp preview（Worker 込みで確認）
 pnpm check       # cf workers types → vp check（fmt + lint + 型）→ vp test
 pnpm format      # vp check --fix
-pnpm test:e2e    # Playwright（vp preview を自動起動。事前に pnpm build）
+pnpm test:e2e    # Playwright（ローカルは build → vp preview を自動起動。CI はビルド済み出力を使う）
 pnpm run deploy  # cf deploy --prebuilt（通常は CI から。`pnpm deploy` は pnpm 組み込みと衝突）
 ```
 

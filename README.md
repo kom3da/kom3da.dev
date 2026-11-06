@@ -8,7 +8,7 @@ Personal profile site for Ryuichi Komeda (米田 龍一).
 - Pages rendered from `profile.json` at build time by a small Vite plugin
 - [Cloudflare Workers](https://developers.cloudflare.com/workers/) (Static Assets + a thin Worker), built and deployed with the [`cf` CLI](https://developers.cloudflare.com/cf/)
 - Tooling: mise, pnpm, Playwright + axe, Renovate
-- GitHub Actions (checks + E2E on every PR, deploy with cache purge on `main`)
+- GitHub Actions (checks + E2E on every PR, deploy on `main`)
 
 ## Features
 

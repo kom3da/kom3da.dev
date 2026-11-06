@@ -89,3 +89,12 @@ test.describe("page", () => {
     await expect(page.locator("html")).toHaveAttribute("data-motion", "off");
   });
 });
+
+test("content stays visible when the site script fails to load", async ({ page }) => {
+  await page.route("**/assets/*.js", (route) => route.abort());
+  await page.goto("/");
+  await expect(page.locator("#links .rise")).toHaveCSS("opacity", "1");
+  await expect(page.locator("[data-motion-toggle]")).toHaveCount(2);
+  for (const toggle of await page.locator("[data-motion-toggle]").all())
+    await expect(toggle).toBeHidden();
+});

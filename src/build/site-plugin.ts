@@ -26,7 +26,8 @@ export function site(): Plugin {
       order: "pre",
       handler(source, ctx) {
         const { head, body } = pageFor(ctx.path);
-        return source.replace("<!--head-->", head).replace("<!--body-->", body);
+        // Function replacers keep `$` sequences in content from being expanded
+        return source.replace("<!--head-->", () => head).replace("<!--body-->", () => body);
       },
     },
     configureServer(server) {

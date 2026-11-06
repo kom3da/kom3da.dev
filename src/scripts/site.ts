@@ -1,4 +1,6 @@
 const root = document.documentElement;
+// Hide reveal targets only once this script runs, so a failed load leaves content visible
+root.classList.add("js");
 
 // Start pane animations once each pane scrolls into view
 const revealer = new IntersectionObserver(

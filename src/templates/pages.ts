@@ -19,7 +19,7 @@ export function indexPage(profile: Profile): PageParts {
     <meta property="og:title" content="${title}">
     <meta property="og:description" content="${profile.bio}">
     <meta property="og:image" content="${ogImage}">
-    <meta property="og:url" content="${profile.url}">
+    <meta property="og:url" content="${profile.url}/">
     <meta property="og:type" content="website">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="${title}">
