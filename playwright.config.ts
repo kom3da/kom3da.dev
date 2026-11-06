@@ -14,9 +14,9 @@ export default defineConfig({
     },
     { name: "mobile", use: { ...devices["Pixel 7"], viewport: { width: 390, height: 844 } } },
   ],
-  // Serve the built site through the real Worker so routing and headers are covered too
+  // Serve the built output through the real Worker (vite preview runs it in workerd)
   webServer: {
-    command: `pnpm exec wrangler dev --port ${port}`,
+    command: `pnpm exec vite preview --port ${port} --strictPort`,
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
   },

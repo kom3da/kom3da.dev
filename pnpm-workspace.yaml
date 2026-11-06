@@ -2,8 +2,3 @@ allowBuilds:
   esbuild: true
   lefthook: true
   workerd: true
-
-# @napi-rs/wasm-runtime otherwise resolves its peer to a broken 2.0 beta,
-# which crashes @astrojs/check
-overrides:
-  "@emnapi/runtime": "^1.11.3"
