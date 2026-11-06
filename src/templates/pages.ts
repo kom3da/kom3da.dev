@@ -9,7 +9,7 @@ export interface PageParts {
 }
 
 export function indexPage(profile: Profile): PageParts {
-  const title = `${profile.nameEn} - ${profile.jobTitle} | kom3da.dev`;
+  const title = `${profile.name} (${profile.nameEn}) - ${profile.jobTitle} | kom3da.dev`;
   const description = `${profile.nameEn} (${profile.name}) - ${profile.jobTitle}。${profile.bio}`;
   const ogImage = `${profile.url}/og-image.png?v=3`;
 
