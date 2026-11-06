@@ -4,27 +4,31 @@ Personal profile site for Ryuichi Komeda (米田 龍一).
 
 ## Tech Stack
 
-- [Vite 8](https://vite.dev/) + [React 19](https://react.dev/) + TypeScript
-- [Cloudflare Workers](https://developers.cloudflare.com/workers/) (SSR + Cache API)
-- GitHub Actions (CI/CD with auto cache purge)
+- [Vite+](https://viteplus.dev/) (Vite, Vitest, Oxlint, Oxfmt) + [Tailwind CSS](https://tailwindcss.com/) + TypeScript
+- Pages rendered from `profile.json` at build time by a small Vite plugin
+- [Cloudflare Workers](https://developers.cloudflare.com/workers/) (Static Assets + a thin Worker), built and deployed with the [`cf` CLI](https://developers.cloudflare.com/cf/)
+- Tooling: mise, pnpm, Playwright + axe, Renovate
+- GitHub Actions (checks + E2E on every PR, deploy on `main`)
 
 ## Features
 
-- Terminal-style UI with dark/light theme (follows OS preference)
-- AI-optimized: `/llms.txt`, `/llms-full.txt`, JSON-LD (ProfilePage + Person + WebSite), semantic HTML
+- tmux-style terminal UI, dark only, with scroll-triggered motion (pausable, respects reduced motion)
+- AI-optimized: `/llms.txt`, `/llms-full.txt`, markdown content negotiation, `Link` header, JSON-LD (ProfilePage + Person + WebSite), semantic HTML
 - SEO: robots.txt, sitemap.xml, canonical URL, OGP / Twitter Cards
-- Accessibility: WCAG AA contrast, skip navigation, prefers-reduced-motion, ARIA labels
+- Accessibility: WCAG AA contrast (checked by axe), skip navigation, works without JS
 - Mobile: responsive, PWA manifest, Apple touch icon, theme-color
-- Security: CSP-ready headers, Permissions-Policy, X-Frame-Options
+- Security headers: X-Content-Type-Options, X-Frame-Options, Referrer-Policy, Permissions-Policy
 - Analytics: Cloudflare Web Analytics + GA4
-- Auto-deploy on push to `main`
 
 ## Development
 
 ```bash
-npm install
-npm run dev
+mise install
+pnpm install
+pnpm dev
 ```
+
+See [CLAUDE.md](CLAUDE.md) for all commands.
 
 ## Data
 

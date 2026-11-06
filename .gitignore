@@ -3,3 +3,7 @@ dist/
 .wrangler/
 .dev.vars
 *.local
+.cloudflare/
+test-results/
+playwright-report/
+.vitest/

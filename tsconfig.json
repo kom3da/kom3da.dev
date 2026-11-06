@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ES2024",
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "jsx": "react-jsx",
+    "moduleResolution": "Bundler",
+    "types": ["node"],
     "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
+    "noUncheckedIndexedAccess": true,
     "resolveJsonModule": true,
+    "verbatimModuleSyntax": true,
     "isolatedModules": true,
-    "noEmit": true,
-    "lib": ["ES2022", "DOM", "DOM.Iterable"],
-    "types": ["@cloudflare/workers-types"]
+    "skipLibCheck": true,
+    "noEmit": true
   },
-  "include": ["src", "vite-env.d.ts"]
+  "include": ["src", "e2e", "*.ts"],
+  "exclude": ["cloudflare.config.ts"]
 }

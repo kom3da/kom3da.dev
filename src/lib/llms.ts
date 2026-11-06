@@ -1,4 +1,4 @@
-import type { Profile } from "../types";
+import { groupSkills, type Profile } from "./profile";
 
 export function generateLlmsTxt(profile: Profile): string {
   const lines = [
@@ -14,6 +14,7 @@ export function generateLlmsTxt(profile: Profile): string {
     "## Sections",
     "",
     `- [About](${profile.url}#about)`,
+    `- [Links](${profile.url}#links)`,
     `- [Skills](${profile.url}#skills)`,
     "",
   ];
@@ -21,22 +22,12 @@ export function generateLlmsTxt(profile: Profile): string {
 }
 
 export function generateLlmsFullTxt(profile: Profile): string {
-  const skillsByCategory = new Map<string, typeof profile.skills>();
-  for (const skill of profile.skills) {
-    const list = skillsByCategory.get(skill.category) ?? [];
-    list.push(skill);
-    skillsByCategory.set(skill.category, list);
-  }
-
-  const skillSections: string[] = [];
-  for (const [category, skills] of skillsByCategory) {
-    skillSections.push(`### ${category}`);
-    skillSections.push("");
-    for (const s of skills) {
-      skillSections.push(`- ${s.name}`);
-    }
-    skillSections.push("");
-  }
+  const skillSections = groupSkills(profile.skills).flatMap(([category, skills]) => [
+    `### ${category}`,
+    "",
+    ...skills.map((s) => `- ${s.name}`),
+    "",
+  ]);
 
   const lines = [
     `# ${profile.nameEn}`,

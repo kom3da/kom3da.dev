@@ -5,8 +5,8 @@
   "bio": "Webアプリケーションの設計・開発から、サーバー・クラウド基盤の構築・運用まで一貫して対応できるエンジニアです。",
   "url": "https://kom3da.dev",
   "links": [
-    { "label": "GitHub", "url": "https://github.com/kom3da" },
-    { "label": "X", "url": "https://x.com/kom3da" },
+    { "label": "GitHub", "url": "https://github.com/kom3da", "handle": "kom3da" },
+    { "label": "X", "url": "https://x.com/kom3da", "handle": "@kom3da" },
     { "label": "Email", "url": "mailto:me@kom3da.dev" }
   ],
   "skills": [
