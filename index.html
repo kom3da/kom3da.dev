@@ -16,17 +16,13 @@
         if (localStorage.getItem("motion") === "off") document.documentElement.dataset.motion = "off";
       } catch {}
     </script>
-    <link rel="preconnect" href="https://www.googletagmanager.com" />
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-60WQQ7SZE8"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag() {
-        // gtag requires the arguments object, not an array
-        dataLayer.push(arguments);
-      }
-      gtag("js", new Date());
-      gtag("config", "G-60WQQ7SZE8");
-    </script>
+    <!-- Cloudflare Web Analytics -->
+    <script
+      type="module"
+      src="https://static.cloudflareinsights.com/beacon.min.js"
+      data-cf-beacon='{"token": "def613f66f24488d91ee1179e7ef3268"}'
+    ></script>
+    <!-- End Cloudflare Web Analytics -->
     <link rel="stylesheet" href="/src/styles/global.css" />
     <script type="module" src="/src/scripts/site.ts"></script>
   </head>

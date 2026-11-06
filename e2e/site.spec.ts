@@ -25,6 +25,16 @@ test.describe("routes", () => {
     expect(await res.text()).toContain("noindex");
   });
 
+  test("hashed assets are cached as immutable", async ({ request }) => {
+    const html = await (await request.get("/")).text();
+    const css = html.match(/\/assets\/[^"]+\.css/)?.[0];
+    expect(css).toBeDefined();
+    const res = await request.get(css!);
+    expect(res.headers()["cache-control"]).toContain("immutable");
+    const missing = await request.get("/assets/missing.js");
+    expect(missing.headers()["cache-control"] ?? "").not.toContain("immutable");
+  });
+
   test("root advertises markdown alternates", async ({ request }) => {
     const res = await request.get("/");
     expect(res.headers().link).toContain("</llms.txt>");

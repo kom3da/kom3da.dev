@@ -11,7 +11,7 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 - **ホスティング**: Cloudflare Workers（Static Assets + 薄い Worker）、`cf` CLI + `@cloudflare/vite-plugin`
 - **その他**: mise（Node / pnpm）、pnpm、Playwright + axe、Renovate
 - **CI/CD**: GitHub Actions（PR と main で検査 → main のみ `cf deploy`）
-- **Analytics**: Cloudflare Web Analytics + GA4
+- **Analytics**: Cloudflare Web Analytics（`index.html` にビーコン）
 
 `cf`、`@cloudflare/vite-plugin` 2.x はベータ版。挙動が変わったら公式ドキュメント（`cf docs search`）を優先して確認する。
 
