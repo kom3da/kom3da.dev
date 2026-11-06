@@ -1,0 +1,23 @@
+---
+import { profile } from "../lib/profile";
+
+const github = profile.links.find((l) => l.label === "GitHub");
+---
+
+<header class="border-b border-line">
+  <div class="mx-auto flex h-14 max-w-[1360px] items-center justify-between px-4 lg:px-10">
+    <a href="#about" class="font-extrabold tracking-[-0.02em]">kom3da<span class="text-lime">.dev</span></a>
+    {
+      github && (
+        <a
+          href={github.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="flex min-h-11 items-center text-[13px] text-muted"
+        >
+          github ↗
+        </a>
+      )
+    }
+  </div>
+</header>

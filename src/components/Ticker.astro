@@ -1,0 +1,26 @@
+---
+import { profile } from "../lib/profile";
+
+const names = profile.skills.map((s) => s.name);
+---
+
+<!-- Decorative: the same skills are listed accessibly in the Skills pane -->
+<div
+  aria-hidden="true"
+  class="overflow-hidden border-y border-line py-3.5 text-[17px] font-bold tracking-[-0.02em] lg:py-[18px] lg:text-[22px]"
+>
+  <div class="track">
+    {
+      [0, 1].map(() => (
+        <span class="flex gap-6 pr-6 whitespace-nowrap lg:gap-9 lg:pr-9">
+          {names.map((name) => (
+            <>
+              <span>{name}</span>
+              <span class="text-lime">/</span>
+            </>
+          ))}
+        </span>
+      ))
+    }
+  </div>
+</div>
