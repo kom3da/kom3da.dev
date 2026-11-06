@@ -2,15 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(git push:*)",
-      "Bash(npx wrangler dev:*)",
+      "Bash(pnpm exec wrangler dev:*)",
       "Bash(curl *)",
       "Bash(kill *)",
       "Bash(lsof *)",
       "WebFetch",
       "Bash(xargs -r kill)",
-      "Bash(npm run build)",
-      "Bash(npm run dev)",
-      "Bash(npm run preview)"
+      "Bash(pnpm build)",
+      "Bash(pnpm dev)",
+      "Bash(pnpm preview)",
+      "Bash(pnpm check)",
+      "Bash(pnpm test)",
+      "Bash(pnpm test:e2e)"
     ]
   }
 }
