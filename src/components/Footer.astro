@@ -1,0 +1,39 @@
+---
+import { isEmail, profile } from "../lib/profile";
+import MotionToggle from "./MotionToggle.astro";
+
+const email = profile.links.find(isEmail);
+const year = new Date().getFullYear();
+---
+
+<footer class="flex-1 border-t border-line">
+  <div
+    class="mx-auto flex max-w-[1360px] flex-col gap-7 px-4 pt-12 pb-10 lg:gap-10 lg:px-10 lg:pt-[72px] lg:pb-12"
+  >
+    {
+      email && (
+        <a
+          href={email.url}
+          class="cta text-[clamp(30px,5vw,72px)] leading-none font-extrabold tracking-[-0.05em]"
+        >
+          {email.url.replace("mailto:", "")} <span class="arrow text-lime" aria-hidden="true">→</span>
+        </a>
+      )
+    }
+    <div
+      class="flex flex-wrap items-center justify-between gap-x-3 gap-y-3 text-[11px]/[1.8] text-muted lg:text-xs"
+    >
+      <p>© {year} {profile.nameEn}</p>
+      <MotionToggle class="border border-chip px-3.5 py-2.5 lg:hidden" />
+      <p class="w-full lg:w-auto">
+        built with Astro · Tailwind CSS · Cloudflare Workers —{" "}
+        <a
+          href="https://github.com/kom3da/kom3da.dev"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-muted">view source ↗</a
+        >
+      </p>
+    </div>
+  </div>
+</footer>

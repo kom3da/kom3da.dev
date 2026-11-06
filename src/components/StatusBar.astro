@@ -1,0 +1,32 @@
+---
+import MotionToggle from "./MotionToggle.astro";
+
+const tabs = ["about", "links", "skills"];
+---
+
+<!-- tmux-style status bar; site.ts moves aria-current to the section in view -->
+<nav aria-label="Sections" class="sticky bottom-0 z-10 flex border-t border-line bg-bar text-xs">
+  <span
+    aria-hidden="true"
+    class="flex items-center bg-lime px-3 font-extrabold text-ink lg:px-3.5 lg:font-bold"
+  >
+    <span class="lg:hidden">❯</span><span class="hidden lg:inline">kom3da</span>
+  </span>
+  <ul class="flex flex-1 lg:flex-none">
+    {
+      tabs.map((id, i) => (
+        <li class="flex-1 lg:flex-none">
+          <a
+            href={`#${id}`}
+            data-spy={id}
+            aria-current={i === 0 ? "true" : undefined}
+            class="tab block py-3 text-center text-muted lg:px-3.5 lg:py-1.5"
+          >
+            {i}:{id}<span class="mark">*</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <MotionToggle class="ml-auto hidden border-l border-line px-3.5 py-1.5 lg:block" />
+</nav>

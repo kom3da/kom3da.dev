@@ -4,109 +4,90 @@ Ryuichi Komeda（米田 龍一）のプロフィールサイト。
 
 ## 技術スタック
 
-- **ビルド**: Vite 8
-- **UI**: React 19 + TypeScript
-- **ホスティング**: Cloudflare Workers（SSR + Cache API）
-- **スタイル**: CSS（フレームワーク不使用）
-- **CI/CD**: GitHub Actions → 自動ビルド・デプロイ・キャッシュパージ
+- **フレームワーク**: Astro 7（静的出力、クライアント JS は小さな `site.ts` のみ）
+- **スタイル**: Tailwind CSS 4（`@theme` でデザイントークン管理）
+- **フォント**: JetBrains Mono（`@fontsource-variable` でセルフホスト）+ 日本語はシステムフォント
+- **ホスティング**: Cloudflare Workers（Static Assets + 薄い Worker）
+- **ツール**: mise（Node / pnpm）、pnpm、Biome、Vitest、Playwright + axe、lefthook、Renovate
+- **CI/CD**: GitHub Actions（PR と main で検査 → main のみデプロイ + キャッシュパージ）
 - **Analytics**: Cloudflare Web Analytics + GA4
 
 ## プロジェクト構成
 
 ```
-├── profile.json          # プロフィールデータ（編集はここだけ）
-├── index.html            # HTMLテンプレート
-├── vite.config.ts
-├── wrangler.jsonc        # Cloudflare Workers 設定
-├── public/
-│   ├── favicon.svg       # SVG favicon
-│   ├── apple-touch-icon.png  # iPhone ホーム画面用
-│   ├── icon-192.png      # Android PWA アイコン
-│   ├── icon-512.png      # Android PWA アイコン（大）
-│   ├── og-image.png      # OGP 画像
-│   ├── 404.html          # 404 ページ（noindex）
-│   ├── manifest.json     # Web App Manifest
-│   ├── robots.txt
-│   └── sitemap.xml
+├── profile.json            # プロフィールデータ（編集はここだけ）
+├── astro.config.mjs
+├── wrangler.jsonc          # Worker + Static Assets 設定
+├── public/                 # favicon, PWA アイコン, OG 画像, manifest, robots.txt
 ├── src/
-│   ├── types.ts          # 型定義（Profile, Skill）
-│   ├── App.tsx           # メインアプリ
-│   ├── entry-client.tsx  # クライアントハイドレーション
-│   ├── entry-server.tsx  # SSR レンダリング関数
-│   ├── worker.tsx        # Cloudflare Worker エントリ
-│   ├── components/       # React コンポーネント
-│   │   ├── About.tsx     # 自己紹介 + リンク（SVGアイコン付き）
-│   │   ├── Skills.tsx    # スキルタグ一覧
-│   │   ├── Neofetch.tsx  # neofetch風の技術スタック表示
-│   │   ├── Terminal.tsx  # ターミナルウィンドウUI
-│   │   └── ThemeToggle.tsx  # ダーク/ライト切り替え
-│   ├── lib/
-│   │   ├── jsonld.ts     # JSON-LD 生成（ProfilePage + Person + WebSite）
-│   │   └── llms.ts       # llms.txt / llms-full.txt 生成
-│   └── styles/
-│       └── global.css    # テーマ対応CSS
-└── .github/workflows/
-    └── deploy.yml        # 自動デプロイ + キャッシュパージ
+│   ├── pages/
+│   │   ├── index.astro     # トップページ
+│   │   ├── 404.astro       # 404（noindex）
+│   │   ├── llms.txt.ts     # /llms.txt（ビルド時生成）
+│   │   ├── llms-full.txt.ts
+│   │   └── sitemap.xml.ts
+│   ├── layouts/Base.astro  # <head>（meta, OGP, JSON-LD, GA4）
+│   ├── components/         # Header, Hero, Ticker, Links, Skills, Footer, StatusBar ...
+│   ├── lib/                # profile 型, JSON-LD / llms.txt 生成（+ Vitest）
+│   ├── scripts/site.ts     # スクロール連動アニメ, ステータスバーの scroll-spy, motion トグル
+│   └── styles/global.css   # Tailwind + トークン + アニメーション
+├── worker/index.ts         # www リダイレクト, markdown ネゴシエーション, セキュリティヘッダー
+├── e2e/site.spec.ts        # Playwright（ルート, ヘッダー, a11y, モバイル横スクロール）
+└── .github/workflows/deploy.yml
 ```
 
 ## デザイン方針
 
-- ターミナル風UI（表示型）：ターミナルウィンドウの見た目でコンテンツを表示
-- ダーク/ライトモード切り替え対応（OS設定に連動、手動切替も可）
-- セマンティックHTML（`<article>`, `<section>`, `<nav>`）を正しく使用
+- tmux 風ターミナル UI：特大プロンプト `$ kom3da` + スキルのティッカー + ペイン分割 + 下部固定のステータスバー
+- **ダーク固定**（OS 連動・ライトモードなし）、アクセントは Acid Lime `#C6F432`
+- 動き：ヒーローは読み込み時、ペインはスクロールで表示されてから開始。ループするもの（ティッカー・ペインの光）は `motion` ボタンで停止可
+- セマンティック HTML（h1 は名前、`<nav>` / `<section>`、Fragment ID `#about` `#links` `#skills` `#skill-*`）
 
 ## SEO / AI 最適化
 
-- `/llms.txt` `/llms-full.txt` — AIエージェント向けマークダウン配信
-- JSON-LD（`@graph`: ProfilePage + Person + WebSite）— 構造化データ
-- セマンティックHTML + Fragment Identifiers — RAG最適化
-- `robots.txt` + `sitemap.xml` + canonical URL
-- OGP / Twitter Card（og-image.png）
-- meta description にプロフィール全文
+- `/llms.txt` `/llms-full.txt` — AI エージェント向けマークダウン
+- `Accept: text/markdown` で `/` にアクセスすると llms-full.txt を返す（Worker）
+- `Link` ヘッダーで llms.txt / sitemap を通知
+- JSON-LD（`@graph`: ProfilePage + Person + WebSite）
+- robots.txt + sitemap.xml + canonical URL + OGP / Twitter Card
 
 ## アクセシビリティ
 
-- WCAG AA コントラスト比準拠
-- Skip-to-content リンク（キーボードナビゲーション）
-- ARIA ラベル（セクション、ナビゲーション、プログレスバー）
-- `prefers-reduced-motion` 対応（アニメーション無効化）
-- `prefers-color-scheme` 対応（OS テーマ連動）
+- WCAG AA コントラスト（axe を E2E で検査）
+- Skip-to-content リンク
+- `prefers-reduced-motion` 対応、ループアニメの停止ボタン（WCAG 2.2.2）
+- JS 無効時も全コンテンツ表示（アニメの初期非表示は `.js` クラスで制御）
 
-## セキュリティ
+## セキュリティ（Worker で付与）
 
-- HTTPS（Cloudflare）
 - X-Content-Type-Options: nosniff
 - X-Frame-Options: DENY
 - Referrer-Policy: strict-origin-when-cross-origin
 - Permissions-Policy: camera=(), microphone=(), geolocation=()
 
-## モバイル対応
-
-- レスポンシブデザイン（480px ブレークポイント）
-- apple-touch-icon（iPhone ホーム画面）
-- Web App Manifest + PWA アイコン（Android）
-- theme-color（アドレスバー色）
-
 ## 開発コマンド
 
 ```bash
-npm run dev        # 開発サーバー起動（wrangler state 自動クリア）
-npm run build      # プロダクションビルド
-npm run preview    # ビルド結果プレビュー
-npm run deploy     # Cloudflare Workers へ手動デプロイ
+pnpm dev         # Astro 開発サーバー（:4321）
+pnpm build       # 静的ビルド（dist/）
+pnpm preview     # ビルド → wrangler dev（Worker 込みで確認、:8787）
+pnpm check       # Biome + astro check + worker tsc + Vitest
+pnpm test:e2e    # Playwright（wrangler dev を自動起動。事前に pnpm build）
+pnpm cf-typegen  # wrangler.jsonc 変更後に Worker の型を再生成
 ```
 
 ## Claude Code スラッシュコマンド
 
 - `/dev` — 開発サーバーを起動し、ルートページの応答を確認
-- `/check` — ビルド → ローカル Wrangler で主要ルートを検証 → 本番サイトの疎通確認
-- `/deploy` — ビルド → コミット → `main` へ push（CI/CD で自動デプロイ）
+- `/check` — check → build → E2E → 本番サイトの疎通確認
+- `/deploy` — check / build → コミット → `main` へ push（CI/CD で自動デプロイ）
 
 ## コーディング規約
 
-- 言語: TypeScript strict mode
-- コンポーネント: 関数コンポーネント + hooks
-- CSS: CSS変数でテーマ管理（`--terminal-bg`, `--text` 等）
+- 言語: TypeScript strict
 - プロフィールデータは `profile.json` に集約。コンポーネントにハードコードしない
-- Worker では `run_worker_first: true` を使用。配列パターンはアセット MIME type が壊れるため不可
-- llms.txt ルートは静的アセットチェックの前に配置（.txt 拡張子のため）
+- 色・フォントは `global.css` の `@theme` トークン（`text-lime`, `border-line` 等）を使う
+- Astro 7 のコンパイラは要素間の改行の空白を詰めるので、空白が必要な箇所は `{" "}` を明示する
+- Worker は `run_worker_first: true` で全リクエストを受け、静的ファイルは `env.ASSETS.fetch` に渡す（配列パターンはアセットの MIME type が壊れるため不可）
+- 404 はアセットの `not_found_handling: "404-page"` に任せる
+- Biome は `.astro` のテンプレートを解析しないため、`.astro` では未使用変数/インポートのルールを無効化している
