@@ -10,7 +10,7 @@ test.describe("routes", () => {
     ["/llms-full.txt", "text/plain"],
     ["/sitemap.xml", "application/xml"],
     ["/favicon.ico", "image/svg+xml"],
-  ]) {
+  ] as const) {
     test(`GET ${path} → 200 ${type}`, async ({ request }) => {
       const res = await request.get(path);
       expect(res.status()).toBe(200);

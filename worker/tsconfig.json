@@ -9,5 +9,5 @@
     "skipLibCheck": true,
     "types": []
   },
-  "include": ["./*.ts"]
+  "include": ["./*.ts", "../cloudflare.config.ts", "../.cloudflare/types"]
 }
