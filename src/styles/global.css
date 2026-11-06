@@ -98,8 +98,8 @@
     inset-inline: 0;
     top: 0;
     height: 1px;
-    background:
-      linear-gradient(90deg, transparent, var(--color-lime), transparent) 0 0 / 40% 100% no-repeat;
+    background: linear-gradient(90deg, transparent, var(--color-lime), transparent) 0 0 / 40% 100%
+      no-repeat;
   }
 
   .chip {
